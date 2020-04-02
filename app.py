@@ -72,17 +72,6 @@ def convert_date_to_string(date):
     date_string=str(date.strftime('%Y-%m-%d'))
     return date_string
 
-def truncate(f, n):
-    '''
-    Trunca un numero a n digitos
-    '''
-    s = '{}'.format(f)
-    if 'e' in s or 'E' in s:
-        return '{0:.{1}f}'.format(f, n)
-    i, p, d = s.partition('.')
-    return '.'.join([i, (d+'0'*n)[:n]])
-
-
 def get_self_path():
 	'''
 	Retorna la ruta del codigo en python que lo llama.
@@ -2230,7 +2219,11 @@ def MMFDTUG(fecha):
     date = fecha[6:10] +'-'+ fecha[3:5]+'-'+ fecha[0:2]
 
     caja = get_frame_sql_user("Puyehue", "MesaInversiones", "usuario1", "usuario1", "select * from zhis_carteras_main where fecha = '"+date+"' and codigo_emi = 'CAJA' and codigo_ins = 'MMFDUTG'")
+    date_ayer = get_prev_weekday(date)
+    caja_ayer = get_frame_sql_user("Puyehue", "MesaInversiones", "usuario1", "usuario1", "select * from zhis_carteras_main where fecha = '"+date_ayer+"' and codigo_emi = 'CAJA' and codigo_ins = 'MMFDUTG'")
    
+
+
     paridades =  get_frame_sql_user("Puyehue", "replicasCredicorp","usrConsultaComercial" , "Comercial1w","Select * from VISTA_PARIDADES_CDP where CODIGO_MONEDA = 'CLP' AND FECHA_PARIDAD ='"+ date +"' ORDER BY CODIGO_MONEDA_ORIGEN ASC")
 
     paridades['CODIGO_MONEDA_ORIGEN'] = paridades['CODIGO_MONEDA_ORIGEN'].str.strip()
@@ -2255,7 +2248,7 @@ def MMFDTUG(fecha):
     ## agregamos columna de fecha de session 
     dfMM = dfMM.assign(fecha_sesion = date)
     ## agregamos columna con el codigo de secuencia
-    dfMM = dfMM.assign(codigo_secuencia = caja['ID']) 
+    dfMM = dfMM.assign(codigo_secuencia = caja.index) 
     dfMM = dfMM.assign(apertura_cierre = 'NULL')
    
     #
@@ -2271,6 +2264,8 @@ def MMFDTUG(fecha):
     dfMM = dfMM.assign(cam_divisa = caja['Moneda'])
 
     #print(cambio_diario['VALOR_PARIDAD'].loc[cambio_diario['Moneda']== 'USD'] )
+
+    dfMM['cam_divisa'] = dfMM['cam_divisa'].str.strip()  
 
     dfMM.loc[dfMM['cam_divisa'] == 'US$', 'cam_divisa'] = dolar
     dfMM.loc[dfMM['cam_divisa'] == '$',   'cam_divisa'] =   '1'
@@ -2304,17 +2299,37 @@ def MMFDTUG(fecha):
 
     dfMM = dfMM.assign(divisa = caja['Moneda'])
 
-
+    dfMM['divisa'] = dfMM['divisa'].str.strip()   
 
     dfMM.loc[dfMM['divisa'] == 'US$', 'divisa'] = '5'
     dfMM.loc[dfMM['divisa'] == '$',   'divisa'] =  '39'
     dfMM.loc[dfMM['divisa'] == 'UF', ' divisa'] =  '84'
     dfMM.loc[dfMM['divisa'] == 'EUR', 'divisa'] =  '4'
 
-    dfMM = dfMM.assign(efectivo_div = caja['Monto']/10000)
+    #print(caja_ayer['Monto'].to_string(index=False).replace('\n' , ''))
+    #print(caja['Monto'].to_string(index=False).strip('\n'))
+   
+    
+    #monto = float(caja_ayer['Monto'].to_string(index=False).replace('\n') )- float(caja['Monto'].to_string(index=False).strip('\n'))
+ 
+   
 
 
-
+    dfMM = dfMM.assign(efectivo_div = caja_ayer['Monto'] - caja['Monto'] )
+    
+    if float(dfMM['efectivo_div'].to_string(index=False)) >= 0:
+        op = 'V'
+        srn = 'R'
+    else:
+        op = 'C'
+        srn = 'S'
+    
+    dfMM = dfMM.assign(operacion = op)
+    dfMM = dfMM.assign(ind_nominal_srn  = srn )
+    if float(dfMM['efectivo_div'].to_string(index=False)) >= 0:
+        dfMM = dfMM.assign(efectivo_div = dfMM['efectivo_div']) 
+    else: 
+        dfMM = dfMM.assign(efectivo_div = - dfMM['efectivo_div']) 
 
     dfMM = dfMM.assign(efectivo_vto_div =0) #  
 
@@ -2328,29 +2343,34 @@ def MMFDTUG(fecha):
     #
     dfMM = dfMM.assign(fec_comunicacion_be = None)  # valores por defecto 
     dfMM = dfMM.assign(fec_liquidacion =     None ) # valores por defecto 
-    dfMM = dfMM.assign(fec_operacion =       caja['fechasess'])  # valores por defecto 
+    dfMM = dfMM.assign(fec_operacion =       caja['fecha'])  # valores por defecto 
 
 
-    dfMM = dfMM.assign(fec_recompra =        caja['fechasess'])  # valores por defecto 
-    dfMM = dfMM.assign(fec_valor    =        caja['fechasess'])  # valores por defecto 
+    dfMM = dfMM.assign(fec_recompra =        caja['fecha'])  # valores por defecto 
+    dfMM = dfMM.assign(fec_valor    =        caja['fecha'])  # valores por defecto 
     dfMM = dfMM.assign(fec_vto      =        caja['fec_vcto'])
 
     dfMM = dfMM.assign(gasto_extra = 0)
     dfMM = dfMM.assign(gastos_div = '')
 
+    
+
+
+
+
     dfMM = dfMM.assign(gestor_ordenante = 2960) # valor por defecto
-    dfMM = dfMM.assign(ind_nominal_srn  = 'R')
+   
 
     dfMM = dfMM.assign(ind_periodificar = 'NULL')
 
  
 
     dfMM = dfMM.assign(instrumento = caja['codigo_ins'])
-
+    
     dfMM['instrumento'] = dfMM['instrumento'].str.strip()    
 
     
-
+    dfMM = dfMM.assign(liquido_div = dfMM['efectivo_div'])
 
     dfMM = dfMM.assign(mercado ='RVE')
 
@@ -2362,7 +2382,7 @@ def MMFDTUG(fecha):
   
 
     # venta o compra segun la tasa de compra, si existe es compra si no es venta
-    dfMM = dfMM.assign(operacion = 'C')
+    
 
     dfMM['operacion'] = dfMM['operacion'].str.strip()
 
@@ -2539,7 +2559,7 @@ class Ui(QMainWindow):
                 per = pd.DataFrame(columns = l)
             
             
-            dfMM = MMFDTUG(self.fech.text())
+            dfMM = MMFDTUG(self.fecha.text())
             dfMM = dfMM.loc[dfMM['cartera'].str.strip() == self.fondo.currentText().strip()]
             
             print('[INFO]: Transacciones de pershing listo...')
