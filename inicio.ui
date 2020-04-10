@@ -34,7 +34,17 @@
   </property>
   <widget class="QWidget" name="password">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="10" column="1">
+    <item row="16" column="1">
+     <widget class="QLabel" name="label_3">
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>Ingrese archivo de transacciones RVN (GEO)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="11" column="1">
      <spacer name="verticalSpacer_7">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -47,27 +57,7 @@
       </property>
      </spacer>
     </item>
-    <item row="15" column="1">
-     <widget class="QLabel" name="label_3">
-      <property name="styleSheet">
-       <string notr="true">color: rgb(255, 255, 255);</string>
-      </property>
-      <property name="text">
-       <string>Ingrese archivo de transacciones RVN (GEO)</string>
-      </property>
-     </widget>
-    </item>
-    <item row="16" column="2">
-     <widget class="QPushButton" name="pathgeo">
-      <property name="styleSheet">
-       <string notr="true">color: rgb(255, 255, 255);</string>
-      </property>
-      <property name="text">
-       <string>...</string>
-      </property>
-     </widget>
-    </item>
-    <item row="17" column="1">
+    <item row="18" column="1">
      <spacer name="verticalSpacer_6">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -80,8 +70,28 @@
       </property>
      </spacer>
     </item>
-    <item row="13" column="1">
-     <widget class="QLineEdit" name="AP"/>
+    <item row="14" column="3">
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="17" column="2">
+     <widget class="QPushButton" name="pathgeo">
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>...</string>
+      </property>
+     </widget>
     </item>
     <item row="0" column="1">
      <spacer name="verticalSpacer_2">
@@ -96,31 +106,15 @@
       </property>
      </spacer>
     </item>
-    <item row="13" column="3">
-     <spacer name="horizontalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
     <item row="14" column="1">
-     <spacer name="verticalSpacer_5">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
+     <widget class="QLineEdit" name="AP"/>
+    </item>
+    <item row="1" column="1" colspan="2">
+     <widget class="QDateEdit" name="Fecha">
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);</string>
       </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
+     </widget>
     </item>
     <item row="4" column="1">
      <spacer name="verticalSpacer_3">
@@ -135,14 +129,30 @@
       </property>
      </spacer>
     </item>
-    <item row="1" column="1" colspan="2">
-     <widget class="QDateEdit" name="Fecha">
+    <item row="13" column="1">
+     <widget class="QLabel" name="label">
       <property name="styleSheet">
        <string notr="true">color: rgb(255, 255, 255);</string>
       </property>
+      <property name="text">
+       <string>Ingrese nombre de archivo aporte y rescate (AP)</string>
+      </property>
      </widget>
     </item>
-    <item row="13" column="0">
+    <item row="15" column="1">
+     <spacer name="verticalSpacer_5">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="14" column="0">
      <spacer name="horizontalSpacer">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -155,15 +165,18 @@
       </property>
      </spacer>
     </item>
-    <item row="12" column="1">
-     <widget class="QLabel" name="label">
+    <item row="19" column="1">
+     <widget class="QPushButton" name="Consulta">
       <property name="styleSheet">
        <string notr="true">color: rgb(255, 255, 255);</string>
       </property>
       <property name="text">
-       <string>Ingrese nombre de archivo aporte y rescate (AP)</string>
+       <string>Consultar</string>
       </property>
      </widget>
+    </item>
+    <item row="17" column="1">
+     <widget class="QLineEdit" name="GEO"/>
     </item>
     <item row="7" column="1">
      <spacer name="verticalSpacer_4">
@@ -178,7 +191,7 @@
       </property>
      </spacer>
     </item>
-    <item row="18" column="2">
+    <item row="19" column="2">
      <widget class="QProgressBar" name="progreso">
       <property name="palette">
        <palette>
@@ -559,19 +572,6 @@ background-color: rgb(94, 94, 94);</string>
       </property>
      </widget>
     </item>
-    <item row="18" column="1">
-     <widget class="QPushButton" name="Consulta">
-      <property name="styleSheet">
-       <string notr="true">color: rgb(255, 255, 255);</string>
-      </property>
-      <property name="text">
-       <string>Consultar</string>
-      </property>
-     </widget>
-    </item>
-    <item row="16" column="1">
-     <widget class="QLineEdit" name="GEO"/>
-    </item>
     <item row="6" column="1" colspan="2">
      <widget class="QComboBox" name="ListFondos">
       <property name="styleSheet">
@@ -580,7 +580,7 @@ color: rgb(255, 255, 255);</string>
       </property>
      </widget>
     </item>
-    <item row="19" column="1">
+    <item row="20" column="1">
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -603,7 +603,7 @@ color: rgb(255, 255, 255);</string>
       </property>
      </widget>
     </item>
-    <item row="13" column="2">
+    <item row="14" column="2">
      <widget class="QPushButton" name="pathap">
       <property name="styleSheet">
        <string notr="true">color: rgb(255, 255, 255);</string>
@@ -612,6 +612,9 @@ color: rgb(255, 255, 255);</string>
        <string>...</string>
       </property>
      </widget>
+    </item>
+    <item row="8" column="2">
+     <widget class="QLineEdit" name="Codigo_Cartera"/>
     </item>
     <item row="8" column="1">
      <widget class="QLabel" name="label_4">
@@ -623,11 +626,34 @@ color: rgb(255, 255, 255);</string>
       </property>
      </widget>
     </item>
-    <item row="8" column="2">
-     <widget class="QLineEdit" name="Codigo_Cartera"/>
-    </item>
     <item row="8" column="3">
      <spacer name="horizontalSpacer_3">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="10" column="1">
+     <widget class="QLabel" name="label_5">
+      <property name="styleSheet">
+       <string notr="true">color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>Ingrese el codigo que se utilizara para FFMM:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="2">
+     <widget class="QLineEdit" name="codigoFFMM"/>
+    </item>
+    <item row="10" column="3">
+     <spacer name="horizontalSpacer_4">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
@@ -658,6 +684,9 @@ color: rgb(255, 255, 255);</string>
    <zorder>label_4</zorder>
    <zorder>Codigo_Cartera</zorder>
    <zorder>horizontalSpacer_3</zorder>
+   <zorder>label_5</zorder>
+   <zorder>codigoFFMM</zorder>
+   <zorder>horizontalSpacer_4</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
